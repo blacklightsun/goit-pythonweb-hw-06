@@ -3,8 +3,8 @@ from faker import Faker
 
 from connect import session
 
-def seed_data(session):
 
+def seed_data(session):
     faker = Faker()
 
     # Create Teachers
@@ -50,7 +50,9 @@ def seed_data(session):
     students = []
 
     for _ in range(50):
-        students.append(Student(name=faker.name(), group_id=faker.random_element(groups).id))
+        students.append(
+            Student(name=faker.name(), group_id=faker.random_element(groups).id)
+        )
     session.add_all(students)
     session.commit()
     print("Students seeded successfully.")
@@ -60,10 +62,18 @@ def seed_data(session):
 
     for student in students:
         for subject in faker.random_elements(subjects, length=5, unique=True):
-            scores.append(Score(student_id=student.id, subject_id=subject.id, score=faker.random_int(min=60, max=100), created=faker.date_between(start_date='-3M', end_date='today')))
+            scores.append(
+                Score(
+                    student_id=student.id,
+                    subject_id=subject.id,
+                    score=faker.random_int(min=60, max=100),
+                    created=faker.date_between(start_date="-3M", end_date="today"),
+                )
+            )
     session.add_all(scores)
     session.commit()
     print("Scores seeded successfully.")
+
 
 seed_data(session)
 print("Database seeded successfully.")

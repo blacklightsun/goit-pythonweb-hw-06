@@ -4,16 +4,16 @@ from models import Score, Student, Group, Subject, Teacher
 from connect import session
 
 class_mapping: Dict[str, Callable] = {
-    'Score': Score,
-    'Student': Student,
-    'Group': Group,
-    'Subject': Subject,
-    'Teacher': Teacher
+    "Score": Score,
+    "Student": Student,
+    "Group": Group,
+    "Subject": Subject,
+    "Teacher": Teacher,
 }
 
-def create_record(model: str, id: int, relations: List[str]):
 
-        # Validate that relations is provided
+def create_record(model: str, id: int, relations: List[str]):
+    # Validate that relations is provided
     if not relations:
         print("Error: no relations provided")
         return None
@@ -22,7 +22,7 @@ def create_record(model: str, id: int, relations: List[str]):
     if len(relations) % 2 != 0:
         print("Error: relations should be in pairs of attribute and value.")
         return None
-    
+
     # Check for existing record with the same name
     attr_dict = {}
     for rel in relations[::2]:
@@ -34,7 +34,7 @@ def create_record(model: str, id: int, relations: List[str]):
     if session.query(class_mapping[model]).filter_by(**attr_dict).first():
         print(f"{model} with same relations '{attr_dict}' already exists.")
         return None
-    
+
     # Create a new record instance
     print(f"Creating record for model {model} with relations: {relations}")
     record = class_mapping[model]()
@@ -49,19 +49,18 @@ def create_record(model: str, id: int, relations: List[str]):
         session.rollback()
         print(f"Error of related models' field(s): {e.__cause__}")
         return None
-    
+
     # Commit the new record to the database
     session.commit()
     print(f"Record created: {record}")
 
 
 def list_records(model: str, id: int, relations: List[str]):
-
     # Validate that only model is provided
     if id or relations:
         print("'list' action accepts the model argument only.")
         return None
-    
+
     print(f"Listing records for model {model}")
     records = session.query(class_mapping[model]).all()
     for record in records:
@@ -70,12 +69,11 @@ def list_records(model: str, id: int, relations: List[str]):
 
 
 def update_record(model: str, id: int, relations: List[str]):
-
     # Validate that at least one of name or relations is provided
     if not relations:
         print("Error: 'update' action requires at least one of relations to update.")
         return None
-    
+
     # Validate that id is provided
     if not id:
         print("Error: 'update' action requires the id argument.")
@@ -114,16 +112,15 @@ def update_record(model: str, id: int, relations: List[str]):
 
 
 def remove_record(model: str, id: int, relations: List[str]):
-
     # Validate that only model and id are provided
     if relations:
         print("Error: 'remove' action accepts the model and the id arguments only.")
         return None
-    
+
     if not id:
         print("Error: 'remove' action requires the id argument.")
         return None
-    
+
     print(f"Removing record for model {model} with id: {id}")
     target = session.get(class_mapping[model], id)
 
@@ -131,7 +128,7 @@ def remove_record(model: str, id: int, relations: List[str]):
     if not target:
         print(f"Error: no record found with id: {id}")
         return None
-    
+
     # Delete the record from the session and commit the transaction
     session.delete(target)
     session.commit()

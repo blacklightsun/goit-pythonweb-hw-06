@@ -1,5 +1,5 @@
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
-from sqlalchemy import Integer, String, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.sql import func
 from datetime import datetime
 
@@ -43,11 +43,13 @@ class Subject(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(nullable=False)
     teacher_id: Mapped[int] = mapped_column(ForeignKey("teachers.id"), nullable=False)
-    
+
     teacher: Mapped["Teacher"] = relationship()
 
     def __repr__(self) -> str:
-        return f"Subject(id={self.id}, name='{self.name}', teacher_id={self.teacher_id})"
+        return (
+            f"Subject(id={self.id}, name='{self.name}', teacher_id={self.teacher_id})"
+        )
 
 
 class Score(Base):
@@ -62,6 +64,7 @@ class Score(Base):
     subject: Mapped["Subject"] = relationship()
 
     def __repr__(self) -> str:
-        return (f"Score(id={self.id}, created={self.created}, student_id={self.student_id}, "
-                f"subject_id={self.subject_id}, score={self.score})")
-    
+        return (
+            f"Score(id={self.id}, created={self.created}, student_id={self.student_id}, "
+            f"subject_id={self.subject_id}, score={self.score})"
+        )
