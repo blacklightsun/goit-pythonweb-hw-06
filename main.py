@@ -23,7 +23,7 @@ def main():
     parser.add_argument('-a', '--action', choices=actions, required=True, help="CRUD action to perform")
     parser.add_argument('-m', '--model', choices=models, required=True, help="Model to perform the action on")
     parser.add_argument('-id', '--id', type=int, help="id of the model instance")
-    parser.add_argument('-r', '--relations', nargs='*', default=[], help="related models' fields")
+    parser.add_argument('-r', '--relations', nargs='*', default=[], help="attributes of model's instance in format: attr1 value1 [attr2 value2] ...")
 
     try:
         args = parser.parse_args()
